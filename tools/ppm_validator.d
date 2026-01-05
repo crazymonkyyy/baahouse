@@ -5,6 +5,7 @@ import std.string;
 import std.array;
 import std.regex;
 import std.conv;
+import tools.tile_name_utils;
 
 /**
  * PPM validator tool for baahouse project
@@ -84,8 +85,30 @@ bool validatePPMFile(string fileName) {
         return false;
     }
     
-    writeln("File: ", fileName, " - Size: ", width, "x", height, " - Max value: ", maxVal);
-    
+        // Extract tile number from filename for name lookup
+        string tileName = "unknown";
+        string fileNameOnly = fileName[ fileName.lastIndexOf('/') + 1 .. $ ];  // Extract filename
+
+        if (fileNameOnly.startsWith("tile_") && fileNameOnly.endsWith(".ppm")) {
+            string nameWithoutExt = fileNameOnly[0 .. fileNameOnly.length - 4]; // Remove ".ppm"
+            string numStr = nameWithoutExt[5 .. $]; // Remove "tile_" prefix
+
+            // Extract just the number part (in case of "tile_123_inverted" format)
+            size_t underscoreIdx = numStr.indexOf('_');
+            if (underscoreIdx != -1) {
+                numStr = numStr[0 .. underscoreIdx];
+            }
+
+            try {
+                int tileNum = to!int(numStr);
+                tileName = getTileName(tileNum);
+            } catch (Exception e) {
+                writeln("Warning: Could not extract tile number from filename ", fileNameOnly);
+            }
+        }
+
+        writeln("File: ", fileName, " - Size: ", width, "x", height, " - Max value: ", maxVal, " - Tile: ", tileName);
+
     // Parse pixel data (after header)
     ubyte[] pixelData = data[headerEnd..$];
     size_t expectedPixelSize = width * height * 3; // 3 bytes per pixel (RGB)
@@ -102,29 +125,29 @@ bool validatePPMFile(string fileName) {
         ubyte r = pixelData[i];
         ubyte g = pixelData[i+1];
         ubyte b = pixelData[i+2];
-        
+
         // Check if RGB values are all the same (grayscale)
         if (r != g || g != b) {
-            writeln("Error: Non-grayscale pixel in ", fileName, 
+            writeln("Error: Non-grayscale pixel in ", fileName,
                     " at position ", i/3, " - RGB: (", r, ",", g, ",", b, ")");
             isBlackAndWhite = false;
             break;
         }
-        
+
         // Check if pixel is only black (0) or white (255)
         if (r != 0 && r != 255) {
-            writeln("Error: Non-black/white pixel in ", fileName, 
+            writeln("Error: Non-black/white pixel in ", fileName,
                     " at position ", i/3, " - Value: ", r);
             isBlackAndWhite = false;
             break;
         }
     }
-    
+
     if (isBlackAndWhite) {
-        writeln("✓ Valid black and white PPM file: ", fileName);
+        writeln("✓ Valid black and white PPM file: ", fileName, " (Tile: ", tileName, ")");
         return true;
     } else {
-        writeln("✗ Invalid file: ", fileName);
+        writeln("✗ Invalid file: ", fileName, " (Tile: ", tileName, ")");
         return false;
     }
 }
