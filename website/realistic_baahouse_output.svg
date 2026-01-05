@@ -1,0 +1,198 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Define clipPaths for each tile to confine their patterns -->
+    <clipPath id="tile0Clip">
+      <rect x="0" y="0" width="128" height="128"/>
+    </clipPath>
+    <clipPath id="tile1Clip">
+      <rect x="128" y="0" width="128" height="128"/>
+    </clipPath>
+    <clipPath id="tile2Clip">
+      <rect x="256" y="0" width="128" height="128"/>
+    </clipPath>
+    <clipPath id="tile3Clip">
+      <rect x="384" y="0" width="128" height="128"/>
+    </clipPath>
+    <clipPath id="tile4Clip">
+      <rect x="0" y="128" width="128" height="128"/>
+    </clipPath>
+    <clipPath id="tile5Clip">
+      <rect x="128" y="128" width="128" height="128"/>
+    </clipPath>
+    <clipPath id="tile6Clip">
+      <rect x="256" y="128" width="128" height="128"/>
+    </clipPath>
+    <clipPath id="tile7Clip">
+      <rect x="384" y="128" width="128" height="128"/>
+    </clipPath>
+    <clipPath id="tile8Clip">
+      <rect x="0" y="256" width="128" height="128"/>
+    </clipPath>
+    <clipPath id="tile9Clip">
+      <rect x="128" y="256" width="128" height="128"/>
+    </clipPath>
+    <clipPath id="tile10Clip">
+      <rect x="256" y="256" width="128" height="128"/>
+    </clipPath>
+    <clipPath id="tile11Clip">
+      <rect x="384" y="256" width="128" height="128"/>
+    </clipPath>
+    <clipPath id="tile12Clip">
+      <rect x="0" y="384" width="128" height="128"/>
+    </clipPath>
+    <clipPath id="tile13Clip">
+      <rect x="128" y="384" width="128" height="128"/>
+    </clipPath>
+    <clipPath id="tile14Clip">
+      <rect x="256" y="384" width="128" height="128"/>
+    </clipPath>
+    <clipPath id="tile15Clip">
+      <rect x="384" y="384" width="128" height="128"/>
+    </clipPath>
+  </defs>
+
+  <!-- Tile 0: x+y<1.0 (diagonal half) -->
+  <mask id="tile0Mask">
+    <rect x="0" y="0" width="128" height="128" fill="white"/>
+    <path d="M0,0 L128,128 L0,128 Z" fill="black"/>
+  </mask>
+  <rect x="0" y="0" width="128" height="128" fill="#acacac"/>
+  <rect x="0" y="0" width="128" height="128" fill="#1a1a1a" mask="url(#tile0Mask)"/>
+
+  <!-- Tile 1: abs((x-0.5)*(y-0.5))<0.1 (saddle band) -->
+  <mask id="tile1Mask">
+    <rect x="128" y="0" width="128" height="128" fill="white"/>
+    <g transform="translate(128,0)">
+      <path d="M0,0 L128,0 L128,128 L0,128 Z" fill="black"/>
+      <!-- Approximate the saddle function using paths -->
+      <path d="M30,30 L98,30 L98,98 L30,98 Z" fill="white"/>
+    </g>
+  </mask>
+  <rect x="128" y="0" width="128" height="128" fill="#efefef"/>
+  <rect x="128" y="0" width="128" height="128" fill="#1a1a1a" mask="url(#tile1Mask)"/>
+
+  <!-- Tile 2: abs(x-0.25)<0.15 || abs(x-0.75)<0.15 (double vertical stripes) -->
+  <g clip-path="url(#tile2Clip)">
+    <rect x="256" y="0" width="128" height="128" fill="#777777"/>
+    <rect x="292" y="0" width="10" height="128" fill="#c1c1c1"/> <!-- approximating abs(x-0.25)<0.15 -->
+    <rect x="344" y="0" width="10" height="128" fill="#c1c1c1"/> <!-- approximating abs(x-0.75)<0.15 -->
+  </g>
+
+  <!-- Tile 3: abs(y-0.25)<0.15 || abs(y-0.75)<0.15 (double horizontal stripes) -->
+  <g clip-path="url(#tile3Clip)">
+    <rect x="384" y="0" width="128" height="128" fill="#252525"/>
+    <rect x="384" y="28" width="128" height="10" fill="#c1c1c1"/> <!-- abs(y-0.25)<0.15 -->
+    <rect x="384" y="80" width="128" height="10" fill="#c1c1c1"/> <!-- abs(y-0.75)<0.15 -->
+  </g>
+
+  <!-- Tile 4: y>0.5 (bottom half) -->
+  <mask id="tile4Mask">
+    <rect x="0" y="128" width="128" height="128" fill="white"/>
+    <rect x="0" y="128" width="128" height="64" fill="black"/> <!-- top half is masked out -->
+  </mask>
+  <rect x="0" y="128" width="128" height="128" fill="#adadad"/>
+  <rect x="0" y="128" width="128" height="128" fill="#c1c1c1" mask="url(#tile4Mask)"/>
+
+  <!-- Tile 5: abs(x-y)<0.2 (diagonal band) -->
+  <mask id="tile5Mask">
+    <rect x="128" y="128" width="128" height="128" fill="white"/>
+    <!-- Mask out areas where abs(x-y) >= 0.2 -->
+    <polygon points="128,128 178,128 128,178" fill="black"/> <!-- upper left triangle where x-y > 0.2 -->
+    <polygon points="256,256 206,256 256,206" fill="black"/> <!-- lower right triangle where x-y > 0.2 -->
+    <path d="M128,206 L178,256 L128,256 Z" fill="black"/> <!-- lower left triangle where y-x > 0.2 -->
+    <path d="M256,128 L206,178 L256,178 Z" fill="black"/> <!-- upper right triangle where y-x > 0.2 -->
+  </mask>
+  <rect x="128" y="128" width="128" height="128" fill="#929292"/>
+  <rect x="128" y="128" width="128" height="128" fill="#c1c1c1" mask="url(#tile5Mask)"/>
+
+  <!-- Tile 6: x>y (diagonal top-left to bottom-right) -->
+  <mask id="tile6Mask">
+    <rect x="256" y="128" width="128" height="128" fill="white"/>
+    <path d="M256,256 L384,128 L384,256 Z" fill="black"/> <!-- bottom triangle where x <= y -->
+  </mask>
+  <rect x="256" y="128" width="128" height="128" fill="#b3b3b3"/>
+  <rect x="256" y="128" width="128" height="128" fill="#c1c1c1" mask="url(#tile6Mask)"/>
+
+  <!-- Tile 7: x+y>1.0 (diagonal bottom-left to top-right) -->
+  <mask id="tile7Mask">
+    <rect x="384" y="128" width="128" height="128" fill="white"/>
+    <path d="M384,128 L512,128 L384,256 Z" fill="black"/> <!-- bottom-left triangle where x+y <= 1.0 -->
+  </mask>
+  <rect x="384" y="128" width="128" height="128" fill="#cccccc"/>
+  <rect x="384" y="128" width="128" height="128" fill="#c1c1c1" mask="url(#tile7Mask)"/>
+
+  <!-- Tile 8: x>0.5 && y>0.5 (bottom-right quadrant) -->
+  <mask id="tile8Mask">
+    <rect x="0" y="256" width="128" height="128" fill="white"/>
+    <rect x="0" y="256" width="64" height="128" fill="black"/> <!-- left half masked -->
+    <rect x="0" y="256" width="128" height="64" fill="black"/> <!-- top half masked -->
+  </mask>
+  <rect x="0" y="256" width="128" height="128" fill="#dddddd"/>
+  <rect x="0" y="256" width="128" height="128" fill="#c1c1c1" mask="url(#tile8Mask)"/>
+
+  <!-- Tile 9: x<0.5 && y<0.5 (top-left quadrant) -->
+  <mask id="tile9Mask">
+    <rect x="128" y="256" width="128" height="128" fill="white"/>
+    <rect x="192" y="256" width="64" height="128" fill="black"/> <!-- right half masked -->
+    <rect x="128" y="320" width="128" height="64" fill="black"/> <!-- bottom half masked -->
+  </mask>
+  <rect x="128" y="256" width="128" height="128" fill="#eeeeee"/>
+  <rect x="128" y="256" width="128" height="128" fill="#c1c1c1" mask="url(#tile9Mask)"/>
+
+  <!-- Tile 10: x>0.5 && y<0.5 (top-right quadrant) -->
+  <mask id="tile10Mask">
+    <rect x="256" y="256" width="128" height="128" fill="white"/>
+    <rect x="256" y="256" width="64" height="128" fill="black"/> <!-- left half masked -->
+    <rect x="256" y="320" width="128" height="64" fill="black"/> <!-- bottom half masked -->
+  </mask>
+  <rect x="256" y="256" width="128" height="128" fill="#ffffff"/>
+  <rect x="256" y="256" width="128" height="128" fill="#c1c1c1" mask="url(#tile10Mask)"/>
+
+  <!-- Tile 11: x<0.5 && y>0.5 (bottom-left quadrant) -->
+  <mask id="tile11Mask">
+    <rect x="384" y="256" width="128" height="128" fill="white"/>
+    <rect x="448" y="256" width="64" height="128" fill="black"/> <!-- right half masked -->
+    <rect x="384" y="256" width="128" height="64" fill="black"/> <!-- top half masked -->
+  </mask>
+  <rect x="384" y="256" width="128" height="128" fill="#111111"/>
+  <rect x="384" y="256" width="128" height="128" fill="#c1c1c1" mask="url(#tile11Mask)"/>
+
+  <!-- Tile 12: abs(x-0.5)<0.05 || abs(y-0.5)<0.05 (thin crosshair) -->
+  <g clip-path="url(#tile12Clip)">
+    <rect x="0" y="384" width="128" height="128" fill="#222222"/>
+    <rect x="61" y="384" width="6" height="128" fill="#c1c1c1"/> <!-- vertical line -->
+    <rect x="0" y="445" width="128" height="6" fill="#c1c1c1"/> <!-- horizontal line -->
+  </g>
+
+  <!-- Tile 13: abs((x+y-1.0))<0.08 && abs((x-0.5)-(y-0.5))>0.2 (diagonal band with wider gap) -->
+
+  <mask id="tile13Mask">
+    <rect x="128" y="384" width="128" height="128" fill="white"/>
+    <!-- First mask entire area (to keep band), then add the gap -->
+    <rect x="128" y="384" width="128" height="128" fill="black"/>
+    <!-- Add the band -->
+    <path d="M128,452 L196,384 L256,384 L256,456 L192,512 L128,512 Z" fill="white"/>
+    <!-- Subtract the gap -->
+    <path d="M128,408 L184,464 L128,464 Z" fill="black"/>
+    <path d="M168,512 L224,456 L224,512 Z" fill="black"/>
+  </mask>
+  <rect x="128" y="384" width="128" height="128" fill="#333333"/>
+  <rect x="128" y="384" width="128" height="128" fill="#c1c1c1" mask="url(#tile13Mask)"/>
+
+  <!-- Tile 14: abs((x+y-1.0))<0.1 (diagonal stripe) -->
+  <mask id="tile14Mask">
+    <rect x="256" y="384" width="128" height="128" fill="white"/>
+    <path d="M256,444 L316,384 L384,384 L384,452 L324,512 L256,512 Z" fill="black"/>
+  </mask>
+  <rect x="256" y="384" width="128" height="128" fill="#444444"/>
+  <rect x="256" y="384" width="128" height="128" fill="#c1c1c1" mask="url(#tile14Mask)"/>
+
+  <!-- Tile 15: abs((x-y))<0.1 (diagonal stripe opposite) -->
+  <mask id="tile15Mask">
+    <rect x="384" y="384" width="128" height="128" fill="white"/>
+    <path d="M384,397 L449,384 L512,384 L512,397 L447,464 L512,531 L512,544 L449,544 L384,544 L384,531 L451,464 L384,397 Z" fill="black"/>
+  </mask>
+  <rect x="384" y="384" width="128" height="128" fill="#555555"/>
+  <rect x="384" y="384" width="128" height="128" fill="#c1c1c1" mask="url(#tile15Mask)"/>
+  
+</svg>

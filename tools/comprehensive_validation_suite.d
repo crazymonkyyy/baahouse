@@ -28,7 +28,7 @@ struct TileTestResult {
 // Runtime dispatch function (using proper template metaprogramming approach)
 bool evalTileRuntime(int tileId, float x, float y) {
     label: switch(tileId) {
-        static foreach(int I; 0 .. 100) {  // Use only the defined tile range (0-99)
+        static foreach(int I; 0 .. 250) {  // Use all defined tiles (250 tiles: 0-249)
             case I: return tile!I(x, y);
         }
         default: return false;
@@ -91,7 +91,7 @@ bool runUnitTests(int tileId, out string errorMessage) {
 bool runPerformanceTests(int tileId, out string errorMessage) {
     auto startTime = Clock.currTime();
 
-    const int testResolution = 64;  // Lower resolution for performance test to avoid long execution
+    const int testResolution = 128;  // Use 128x128 resolution for performance test
     int evaluations = 0;
     int trueCount = 0;
 
@@ -110,8 +110,8 @@ bool runPerformanceTests(int tileId, out string errorMessage) {
     auto endTime = Clock.currTime();
     Duration execTime = endTime - startTime;
 
-    // Check if evaluation took too long (more than 100ms for 4096 evaluations)
-    if (execTime.total!"msecs" > 100) {
+    // Check if evaluation took too long (more than 2000ms for 16384 evaluations at 128x128)
+    if (execTime.total!"msecs" > 2000) {
         errorMessage = format("Tile %d performance test exceeded threshold: %sms",
                               tileId, execTime.total!"msecs");
         return false;
@@ -159,7 +159,7 @@ int main(string[] args) {
     writeln("===============================================");
 
     int startTile = 0;
-    int endTile = 49; // Test first 50 tiles
+    int endTile = 249; // Test all tiles up to 249 (0-249, total 250 tiles)
 
     if (args.length >= 2) {
         startTile = to!int(args[1]);

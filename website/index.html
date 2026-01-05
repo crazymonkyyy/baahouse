@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Baahouse Format Comparison</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        table { border-collapse: collapse; width: 100%; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .highlight { background-color: #ffffcc; }
+    </style>
+</head>
+<body>
+    <h1>Baahouse Format Comparison</h1>
+    
+    <p>This page demonstrates the file size comparison between the baahouse format and various bitmap formats when rendering the same image to 512x512 pixels.</p>
+
+    <h2>File Size Comparison Table</h2>
+    <table>
+        <tr>
+            <th>Format</th>
+            <th>File Extension</th>
+            <th>File Size</th>
+            <th>Description</th>
+        </tr>
+        <tr class="highlight">
+            <td>Baahouse</td>
+            <td>.🐑 🏠</td>
+            <td>64 bytes</td>
+            <td>Vector-based tile definitions</td>
+        </tr>
+        <tr>
+            <td>Raw Bitmap</td>
+            <td>.ppm</td>
+            <td>769 KB</td>
+            <td>Uncompressed 512×512×3 bytes per pixel</td>
+        </tr>
+        <tr>
+            <td>SVG (Approximation)</td>
+            <td>.svg</td>
+            <td>~800 KB</td>
+            <td>Geometric approximation of rendered output (not actual tile functions)</td>
+        </tr>
+        <tr>
+            <td>PNG</td>
+            <td>.png</td>
+            <td>3.9 KB</td>
+            <td>Lossless compressed bitmap</td>
+        </tr>
+        <tr>
+            <td>JPEG</td>
+            <td>.jpg</td>
+            <td>46 KB</td>
+            <td>Lossy compressed bitmap</td>
+        </tr>
+    </table>
+
+    <h2>Compression Efficiency</h2>
+    <ul>
+        <li><strong>Baahouse vs Raw Bitmap</strong>: The baahouse format is <strong>12,000x smaller</strong> than the raw bitmap</li>
+        <li><strong>Baahouse vs SVG (failed attempt)</strong>: This comparison is misleading because the SVG is not a proper representation of the tile functions - it's just a geometric approximation of the rendered output</li>
+        <li><strong>Baahouse vs JPEG</strong>: The baahouse format is <strong>~700x smaller</strong> than JPEG</li>
+        <li><strong>Baahouse vs PNG</strong>: The baahouse format is <strong>~60x smaller</strong> than PNG</li>
+    </ul>
+
+    <h2>Visual Comparison</h2>
+    <p>Below are the actual rendered images:</p>
+    
+    <h3>PPM (Raw Bitmap - 769 KB)</h3>
+    <img src="very_large_render.ppm" alt="Raw PPM render" style="max-width: 100%;">
+
+    <h3>SVG (Vector - ~800 KB)</h3>
+    <img src="realistic_baahouse_output.svg" alt="SVG vector representation" style="max-width: 100%;">
+
+    <h3>PNG (Compressed - 3.9 KB)</h3>
+    <img src="very_large_render.png" alt="PNG render" style="max-width: 100%;">
+
+    <h3>JPEG (Compressed - 46 KB)</h3>
+    <img src="very_large_render.jpg" alt="JPEG render" style="max-width: 100%;">
+
+    <p>Note: The original Baahouse format file (small_grid.🐑 🏠) is only 64 bytes and contains the mathematical definitions for the entire image.</p>
+
+    <h2>Scalability Benefits</h2>
+    <p>The baahouse format maintains constant file size regardless of render resolution. A 1000x1000 render would still be 64 bytes in .baahouse format but would be ~3MB in uncompressed PPM.</p>
+
+    <h2>Quality Preservation</h2>
+    <ul>
+        <li>The baahouse format maintains perfect mathematical precision at any resolution</li>
+        <li>Bitmap formats lose information upon compression (JPEG with lossy compression, PNG with lossless)</li>
+    </ul>
+
+    <p>This comparison demonstrates the extraordinary compression efficiency of the baahouse format, which achieves orders of magnitude smaller file sizes while preserving perfect scalability and mathematical precision compared to traditional bitmap formats.</p>
+
+    <h2>Important Note on SVG Representation</h2>
+    <p>The SVG file provided here (<code>realistic_baahouse_output.svg</code>) is not a proper conversion of the baahouse format. Rather than representing the mathematical tile functions as vectors (which would be much more efficient), it contains detailed geometric approximations of the rendered output. In a proper conversion, the SVG would be much smaller than the PPM file, closer in size to the original baahouse file. This implementation failed to properly represent the mathematical nature of the baahouse format in SVG form, demonstrating that converting these mathematical functions to vector paths is non-trivial.</p>
+</body>
+</html>
